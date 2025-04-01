@@ -11,54 +11,55 @@ interface TodoItem{
 
 function App() {
 
-  const [todoList, setTodoList] = useState<TodoItem[]>([])
-  const [newtodo, setNewTodo] = useState<string>('')
+  const [todos, setTodos] = useState<TodoItem[]>([])
+  const [newTodo, setNewTodo] = useState<string>('')
 
   const adicionarTarefa = () => {
-    if(newtodo !== "") {
+    if(newTodo !== "") {
       const newId = crypto.randomUUID()
       const newTodoItem: TodoItem = {
           id: newId,
-          texto: newtodo,
+          texto: newTodo,
           completado: false
       }
-      setTodoList([...todoList, newTodoItem])
+      setTodos([...todos, newTodoItem])
       setNewTodo('')
 
     }
   }
+ 
+
   const marcarCompleto = (id: string) => {
-    const newTodoList = todoList.map(item => {
-      if(item.id === id) {
-        return {...item, completado: !item.completado}
+
+      const todosAtualizasos = todos.map(todo => {
+      if(todo.id === id) {
+        return {...todo, completado: !todo.completado}
 
       }
-    return item
+    return todo
   }) 
-   setTodoList(newTodoList)
+   setTodos(todosAtualizasos)
   }
 
   return (
       <div className='app'>
         <div className='container'>
-        <h1>Lista de Tarefas</h1>
-        <div className='input-container'>
-          <input type="text" value={newtodo} onChange={(e) => setNewTodo(e.target.value)}/>
-          <button onClick={adicionarTarefa}>Adicionar Tarefa</button> 
+            <h1>Lista de Tarefas</h1>
+             <div className='input-container'>
+                <input type="text" onChange={(e) => setNewTodo(e.target.value)}/>
+                <button className='primary-color' onClick={adicionarTarefa}>Adicionar Tarefa</button> 
+             </div>
+             <ol>
+                {
+                todos.map((todo) => (
+                  <li key={todo.id}>
+                    <input type="checkbox" checked={todo.completado} onChange={() => marcarCompleto(todo.id)} />
+                    <span style={{textDecoration: todo.completado ? 'line-through' : 'none'}} >{todo.texto}</span>
+                  </li>
+                ))
+                }
+            </ol>
         </div>
-          <ol>
-            {
-            todoList.map((todo) => (
-              <li key={todo.id}>
-                <input type="checkbox" checked={todo.completado} onChange={() => marcarCompleto(todo.id)} />
-                <span style={{textDecoration: todo.completado ? 'line-through' : 'none'}} >{todo.texto}</span>
-              </li>
-            ))
-            }
-          </ol>
-        </div>
-        
-
       </div>
   )
 }
