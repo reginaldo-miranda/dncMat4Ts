@@ -12,41 +12,57 @@ interface TodoItem{
 function App() {
 
   const [todos, setTodos] = useState<TodoItem[]>([])
-  const [newTodo, setNewTodo] = useState<string>('')
+  const [novoTodo, setNovoTodo] = useState<string>("")
+  const [estaCarregado, setEstaCarregado] = useState<boolean>(false)
 
-  const adicionarTarefa = () => {
-    if(newTodo !== "") {
+
+
+
+  const adicionarTarefa = (): void => {
+    if(novoTodo !== "") {
       const newId = crypto.randomUUID()
       const newTodoItem: TodoItem = {
           id: newId,
-          texto: newTodo,
+          texto: novoTodo,
           completado: false
       }
       setTodos([...todos, newTodoItem])
-      setNewTodo('')
+      setNovoTodo("")
 
     }
   }
+
+  const removerTarefa = (id:string): void => {
+    const tarefasAtualizadas = todos.filter((todo) => todo.id !== id)
+     setTodos(tarefasAtualizadas)
+  }
  
 
-  const marcarCompleto = (id: string) => {
+  const marcarCompleto = (id: string):void => {
 
-      const todosAtualizasos = todos.map(todo => {
+      const todosAtualizados = todos.map(todo => {
       if(todo.id === id) {
         return {...todo, completado: !todo.completado}
 
       }
     return todo
   }) 
-   setTodos(todosAtualizasos)
+   setTodos(todosAtualizados)
+  }
+
+  const obterTarefasCompletas = (): TodoItem[] =>{
+
+    return todos.filter(todo => todo.completado)
+
+
   }
 
   return (
       <div className='app'>
         <div className='container'>
-            <h1>Lista de Tarefas</h1>
+            <h1>Lista de Tarefas - { obterTarefasCompletas().length} / {todos.length}</h1>
              <div className='input-container'>
-                <input type="text" onChange={(e) => setNewTodo(e.target.value)}/>
+                <input type="text" value={novoTodo} onChange={(e) => setNovoTodo(e.target.value)}/>
                 <button className='primary-color' onClick={adicionarTarefa}>Adicionar Tarefa</button> 
              </div>
              <ol>
@@ -55,6 +71,7 @@ function App() {
                   <li key={todo.id}>
                     <input type="checkbox" checked={todo.completado} onChange={() => marcarCompleto(todo.id)} />
                     <span style={{textDecoration: todo.completado ? 'line-through' : 'none'}} >{todo.texto}</span>
+                    <button onClick={() => removerTarefa(todo.id)}>Remover</button>
                   </li>
                 ))
                 }
@@ -64,4 +81,5 @@ function App() {
   )
 }
 
-export default App
+export default App 
+
