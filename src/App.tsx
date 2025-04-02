@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import './App.css'
+import { useTheme } from './ThemeContext'
 
 
 interface TodoItem{
@@ -12,6 +13,8 @@ interface TodoItem{
 function App() {
   
   const chaveTarefasmemoria = "tarefas"
+
+  const {theme, toggleTheme} = useTheme()
   const [todos, setTodos] = useState<TodoItem[]>([])
   const [novoTodo, setNovoTodo] = useState<string>("")
   const [estaCarregado, setEstaCarregado] = useState<boolean>(false)
@@ -93,8 +96,8 @@ function App() {
                 ))
                 }
             </ol>
-            <button onClick={console.log}>
-               Alterar Tema
+            <button onClick={toggleTheme}>
+               Alterar para o Tema { theme === "light" ? 'Escuro' : 'Claro'}
             </button>
         </div>
       </div>

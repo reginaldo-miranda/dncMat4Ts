@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react"
+import { createContext, ReactNode, useContext, useState } from "react"
 
 
 interface ThemeContextType{
@@ -13,5 +13,19 @@ export const ThemePovider = ({children}: {children: ReactNode}) => {
     const toggleTheme = () => {
         setTheme((previousTheme) => (previousTheme === 'light' ? 'dark' : 'light'))
     }
+    return (
+        <ThemeContext.Provider value={{theme, toggleTheme}}>
+            {children}
+        </ThemeContext.Provider>
+    )
 }
 
+export const useTheme = () => {
+    const context = useContext(ThemeContext)
+    
+    if(!context){
+        throw new Error("useThme deve ser utilizaso com um themeProvider")
+
+    }
+    return context
+}
