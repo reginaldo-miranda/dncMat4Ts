@@ -78,8 +78,8 @@ function App() {
 
 
   return (
-      <div className='app'>
-        <div className='container'>
+      <div className={`app ${theme}`}>
+        <div className= {`container ${theme}`} >
             <h1>Lista de Tarefas - { obterTarefasCompletas().length} / {todos.length}</h1>
              <div className='input-container'>
                 <input type="text" value={novoTodo} onChange={(e) => setNovoTodo(e.target.value)}/>
